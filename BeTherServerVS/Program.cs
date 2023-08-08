@@ -4,6 +4,7 @@ using BeTherServer.Services;
 using BeTherServer.MongoContext;
 using BeTherServer.Chat;
 using BeTherServer.Services.UpdateLocationService;
+using BeTherServer.Services.NotificationsService;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoService"));
@@ -17,6 +18,7 @@ builder.Services.AddSingleton<QuestionsAskedService>();
 builder.Services.AddScoped<IConnectToAppService, ConnectToAppService>();
 builder.Services.AddSingleton<IQuestionsAskedService, QuestionsAskedService>();
 builder.Services.AddSingleton<IUpdateLocationService, UpdateLocationService>();
+builder.Services.AddSingleton<INotificationsService, NotificationsService>();
 
 
 // Add services to the container

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using BeTherServer.Services.Utils;
 using BeTherServer.Services;
 using BeTherServer.Services.UpdateLocationService;
+using BeTherServer.Services.NotificationsService;
 
 namespace BeTherMongoDB.Services;
 
@@ -10,10 +11,14 @@ public class QuestionsAskedService :IQuestionsAskedService
 {
 
     IQuestionAskedDBContext m_QuestionsAskedDBContext;
+    IUpdateLocationService m_UpdateLocationService;
+    INotificationsService m_NotificationsService;
 
-    public QuestionsAskedService(IQuestionAskedDBContext i_QuestionsAskedDBSContext)
+    public QuestionsAskedService(IQuestionAskedDBContext i_QuestionsAskedDBSContext, IUpdateLocationService i_UpdateLocationService, INotificationsService i_NotificationsService)
     {
         m_QuestionsAskedDBContext = i_QuestionsAskedDBSContext;
+        m_UpdateLocationService = i_UpdateLocationService;
+        m_NotificationsService = i_NotificationsService;
     }
 
     public async Task<ResultUnit<List<QuestionAsked>>> GetUsersPreviousQuestions(string i_username)
@@ -37,9 +42,7 @@ public class QuestionsAskedService :IQuestionsAskedService
     {
         ResultUnit<List<string>> result = new ResultUnit<List<string>>();
         await m_QuestionsAskedDBContext.InsertNewQuestionAsked(i_QuestionAskedToInsert);
-        List<string> relevantUsers = new List<string>();
-        IUpdateLocationService updateLocationService = new UpdateLocationService();
-        Dictionary<string, Location> locations = updateLocationService.GetLocations();
+        Dictionary<string, Location> locations = m_UpdateLocationService.GetLocations();
         foreach (var kvp in locations)
         {
             string userName = kvp.Key;
@@ -47,10 +50,10 @@ public class QuestionsAskedService :IQuestionsAskedService
             if (i_QuestionAskedToInsert.locationLatitude.Equals(location.latitude) && 
                 i_QuestionAskedToInsert.locationLongitude.Equals(location.longitude))
             {
-                relevantUsers.Add(userName);
+                m_NotificationsService.AddNotification(userName, i_QuestionAskedToInsert);
             }
         }
-        result.ReturnValue = relevantUsers;
+        //result.ReturnValue = relevantUsers;
         result.IsSuccess = true;
         return result;
     }
