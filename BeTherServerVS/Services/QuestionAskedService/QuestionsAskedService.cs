@@ -47,8 +47,8 @@ public class QuestionsAskedService :IQuestionsAskedService
         {
             string userName = kvp.Key;
             Location location = kvp.Value;
-            if (i_QuestionAskedToInsert.locationLatitude.Equals(location.latitude) && 
-                i_QuestionAskedToInsert.locationLongitude.Equals(location.longitude))
+            if (i_QuestionAskedToInsert.location.latitude.Equals(location.latitude) && 
+                i_QuestionAskedToInsert.location.longitude.Equals(location.longitude))
             {
                 m_NotificationsService.AddNotification(userName, i_QuestionAskedToInsert);
             }
