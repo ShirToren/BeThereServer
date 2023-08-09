@@ -15,9 +15,9 @@ namespace BeTherServer.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUsersNotifications(string i_UserName)
+        public IActionResult GetUsersNotifications(string UserName)
         {
-            List<QuestionAsked> notificationsList = m_NotificationsLogic.GetUsersNotifications(i_UserName);
+            List<QuestionAsked> notificationsList = m_NotificationsLogic.GetUsersNotifications(UserName);
 
             try
             {
