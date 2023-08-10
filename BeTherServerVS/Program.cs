@@ -6,6 +6,7 @@ using BeTherServer.Chat;
 using BeTherServer.Services.UpdateLocationService;
 using BeTherServer.Services.NotificationsService;
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoService"));
 
@@ -44,3 +45,4 @@ app.MapControllers();
 //chat
 app.MapHub<ChatHub>("/chat");
 app.Run();
+

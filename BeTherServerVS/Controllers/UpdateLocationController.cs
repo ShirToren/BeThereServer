@@ -19,7 +19,7 @@ namespace BeTherServer.Controllers
         [HttpGet]
         public IActionResult GetAllLocations()
         {
-            Dictionary<string, Location> locations = m_UpdateLocationLogic.GetLocations();
+            Dictionary<string, LocationData> locations = m_UpdateLocationLogic.GetLocations();
         
             try
             {
@@ -32,7 +32,7 @@ namespace BeTherServer.Controllers
 
         }
         [HttpPost]
-        public IActionResult Post(string UserName, [FromBody] Location i_Location)
+        public IActionResult Post(string UserName, [FromBody] LocationData i_Location)
         {
                 m_UpdateLocationLogic.UpdateCurrentLocation(UserName, i_Location);
                 return Ok();

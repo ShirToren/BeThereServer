@@ -4,15 +4,15 @@ namespace BeTherServer.Services.UpdateLocationService
 {
     public class UpdateLocationService : IUpdateLocationService
     {
-        private readonly Dictionary<string, Location> m_Locations = new Dictionary<string, Location>();
+        private readonly Dictionary<string, LocationData> m_Locations = new Dictionary<string, LocationData>();
         private static readonly object sr_DictionaryLock = new object();
 
-        public Dictionary<string, Location> GetLocations()
+        public Dictionary<string, LocationData> GetLocations()
         {
              return m_Locations;
         }
 
-        public void UpdateCurrentLocation(string i_UserName, Location i_Location)
+        public void UpdateCurrentLocation(string i_UserName, LocationData i_Location)
         {
             lock (sr_DictionaryLock)
             {
