@@ -2,10 +2,9 @@
 using BeTherMongoDB.Services;
 using BeTherServer.Services;
 using BeTherServer.MongoContext;
-using BeTherServer.Chat;
 using BeTherServer.Services.UpdateLocationService;
 using BeTherServer.Services.NotificationsService;
-
+using BeTherServer.Services.ChatService;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoService"));
@@ -15,6 +14,7 @@ builder.Services.AddSignalR();
 
 builder.Services.AddSingleton<IConnectToAppDBContext,ConnectToAppMongoContext>();
 builder.Services.AddSingleton<IQuestionAskedDBContext, AskedQuestionsMongoContext>();
+builder.Services.AddSingleton<IChatMessagesDBContext, ChatMessagesMongoContext>();
 builder.Services.AddSingleton<QuestionsAskedService>();
 builder.Services.AddScoped<IConnectToAppService, ConnectToAppService>();
 builder.Services.AddSingleton<IQuestionsAskedService, QuestionsAskedService>();

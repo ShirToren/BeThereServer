@@ -7,6 +7,7 @@ namespace BeTherServer.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
+        public string chatRoomId { get; set; } = null!;
 
         public string question { get; set; } = null!;
         public int? minimumAgeRange { get; set; } = null!;
