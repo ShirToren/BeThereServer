@@ -52,7 +52,26 @@ namespace BeTherServer.Services
 
             return resultHelper;
         }
-            
+
+        public async Task<ResultUnit<UserData>> GetUserData(string i_UserName)
+        {
+            ResultUnit<UserData> resultHelper = new ResultUnit<UserData>();
+            UserData usersData = await m_UserInfoDatabaseService.GetUserByUsername(i_UserName);
+
+            if (usersData != null)
+            {
+                resultHelper.IsSuccess = true;
+                resultHelper.ReturnValue = usersData;
+            }
+            else
+            {
+                resultHelper.IsSuccess = false;
+            }
+
+            return resultHelper;
+        }
+
+
 
         private bool checkIfUsernameFreeToUse(string i_Username, List<UserData> usersData)
         {

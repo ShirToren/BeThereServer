@@ -8,6 +8,7 @@ namespace BeTherServer.Services
     {
         Task<ResultUnit<UserData>> LoginToApp(string i_username, string i_password);
         Task<ResultUnit<string>> CreateNewUserAccount(UserData i_NewUser);
+        Task<ResultUnit<UserData>> GetUserData(string i_UserName);
     }
 }
 

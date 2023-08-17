@@ -68,5 +68,29 @@ public class ConnectToAppController : Controller
         }
     }
 
+    [Route("GetUser")]
+    [HttpGet]
+    public async Task<IActionResult> GetUserData(string UserName)
+    {
+        try
+        {
+            ResultUnit<UserData> result = await m_ConnectToAppLogic.GetUserData(UserName);
+            if (result.IsSuccess == false)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(result.ReturnValue);
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500);
+        }
+    }
+
+
+
 }
 
