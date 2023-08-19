@@ -49,18 +49,20 @@ public class QuestionsAskedService :IQuestionsAskedService
         {
             string userName = kvp.Key;
             LocationData location = kvp.Value;
-/*            double distance = CalculateDistance(i_QuestionAskedToInsert.location.latitude, i_QuestionAskedToInsert.location.longitude,
+            double distance = CalculateDistance(i_QuestionAskedToInsert.location.latitude, i_QuestionAskedToInsert.location.longitude,
                 location.latitude, location.longitude);
-            double radiusKm = 0.5; // Radius in kilometers
+            distance = distance * 1000;
+            double radiusKm = i_QuestionAskedToInsert.radius; // Radius in kilometers
             if (distance <= radiusKm)
             {
-                ///inside
-            }*/
-            if (i_QuestionAskedToInsert.location.latitude.Equals(location.latitude) && 
-                i_QuestionAskedToInsert.location.longitude.Equals(location.longitude))
-            {
                 m_NotificationsService.AddNotification(userName, i_QuestionAskedToInsert);
+
             }
+            //if (i_QuestionAskedToInsert.location.latitude.Equals(location.latitude) && 
+            //    i_QuestionAskedToInsert.location.longitude.Equals(location.longitude))
+            //{
+            //    m_NotificationsService.AddNotification(userName, i_QuestionAskedToInsert);
+            //}
         }
         result.IsSuccess = true;
         return result;
