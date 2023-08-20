@@ -5,13 +5,17 @@ namespace BeTherServer.Services.AnswerService
 {
     public class AnswerService : IAnswerService
     {
-        private readonly Dictionary<string, List<Answer>> m_Answers = new Dictionary<string, List<Answer>>();
+        private readonly Dictionary<string, List<UserAnswer>> m_Answers = new Dictionary<string, List<UserAnswer>>();
         private static readonly object sr_DictionaryLock = new object();
-        public async Task<ResultUnit<string>> PostNewAnswer(string i_UserName, Answer i_AnswerToInsert)
+
+        public async Task<ResultUnit<string>> PostNewAnswer(string i_UserName, UserAnswer i_AnswerToInsert)
         {
             ResultUnit<string> result = new ResultUnit<string>();
-            //insert to data base
+
             
+            //insert to data base
+
+
             lock (sr_DictionaryLock)
             {
                 if(m_Answers.ContainsKey(i_UserName))
@@ -20,7 +24,7 @@ namespace BeTherServer.Services.AnswerService
                 }
                 else
                 {
-                    m_Answers.Add(i_UserName, new List<Answer>());
+                    m_Answers.Add(i_UserName, new List<UserAnswer>());
                     m_Answers[i_UserName].Add(i_AnswerToInsert);
                 }
             }
@@ -28,11 +32,11 @@ namespace BeTherServer.Services.AnswerService
             return result;
         }
 
-        public List<Answer> GetUsersNewAnswers(string i_UserName)
+        public List<UserAnswer> GetUsersNewAnswers(string i_UserName)
         {
             lock (sr_DictionaryLock)
             {
-                List<Answer> newAnswers = new List<Answer>();
+                List<UserAnswer> newAnswers = new List<UserAnswer>();
                 if (!m_Answers.ContainsKey(i_UserName))
                 {
                     return newAnswers;

@@ -6,16 +6,15 @@ namespace BeTherServer.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public string? Id { get; set; } = null!;
         public string chatRoomId { get; set; } = null!;
-
+   
         public string question { get; set; } = null!;
+        public long? questionId { get; set; } = null!;
         public int? minimumAgeRange { get; set; } = null!;
         public int? maximumAgeRange { get; set; } = null!;
         public string gender { get; set; } = null!;
         public LocationData location { get; set; } = null!;
-        //public double? locationLatitude { get; set; } = null!;
-        //public double? locationLongitude { get; set; } = null!;
         public string date { get; set; } = null!;
         public string time { get; set; } = null!;
         public string username { get; set; } = null!;

@@ -14,11 +14,12 @@ builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("Mo
 builder.Services.AddSignalR();
 
 builder.Services.AddSingleton<IConnectToAppDBContext,ConnectToAppMongoContext>();
-builder.Services.AddSingleton<IQuestionAskedDBContext, AskedQuestionsMongoContext>();
+builder.Services.AddSingleton<IAskedQuestionDBContext, AskedQuestionsMongoContext>();
+builder.Services.AddSingleton<IQuestionAnswersDBContext, QuestionAnswersMongoContext>();
 builder.Services.AddSingleton<IChatMessagesDBContext, ChatMessagesMongoContext>();
-builder.Services.AddSingleton<QuestionsAskedService>();
+builder.Services.AddSingleton<UserQuestionsService>();
 builder.Services.AddScoped<IConnectToAppService, ConnectToAppService>();
-builder.Services.AddSingleton<IQuestionsAskedService, QuestionsAskedService>();
+builder.Services.AddSingleton<IAskedQuestionService, UserQuestionsService>();
 builder.Services.AddSingleton<IUpdateLocationService, UpdateLocationService>();
 builder.Services.AddSingleton<INotificationsService, NotificationsService>();
 builder.Services.AddSingleton<IAnswerService, AnswerService>();
