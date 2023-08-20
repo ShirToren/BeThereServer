@@ -8,7 +8,7 @@ using Azure;
 
 namespace BeTherMongoDB.Services;
 
-public class AskedQuestionsMongoContext : BaseMongoContext<QuestionAsked>,IQuestionAskedDBContext
+public class AskedQuestionsMongoContext : BaseMongoContext<QuestionAsked>,IAskedQuestionDBContext
 {
 
     private static readonly string m_collectionName = "AskedQuestions";

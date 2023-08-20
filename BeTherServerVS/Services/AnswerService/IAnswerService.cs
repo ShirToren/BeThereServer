@@ -5,7 +5,7 @@ namespace BeTherServer.Services.AnswerService
 {
     public interface IAnswerService
     {
-        Task<ResultUnit<string>> PostNewAnswer(string i_UserName, Answer i_AnswerToInsert);
-        List<Answer> GetUsersNewAnswers(string i_UserName);
+        Task<ResultUnit<string>> PostNewAnswer(string i_UserName, UserAnswer i_AnswerToInsert);
+        List<UserAnswer> GetUsersNewAnswers(string i_UserName);
     }
 }

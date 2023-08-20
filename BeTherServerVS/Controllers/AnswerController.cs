@@ -14,7 +14,7 @@ namespace BeTherServer.Controllers
             r_AnswerLogic = i_AnswerLogic;
         }
         [HttpPost]
-        public async Task<IActionResult> Post(string UserName, [FromBody] Answer i_Answer)
+        public async Task<IActionResult> Post(string UserName, [FromBody] UserAnswer i_Answer)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace BeTherServer.Controllers
         [HttpGet]
         public IActionResult GetUsersNewAnswers(string UserName)
         {
-            List<Answer> newAnswersList = r_AnswerLogic.GetUsersNewAnswers(UserName);
+            List<UserAnswer> newAnswersList = r_AnswerLogic.GetUsersNewAnswers(UserName);
             try
             {
                 return Ok(newAnswersList);
