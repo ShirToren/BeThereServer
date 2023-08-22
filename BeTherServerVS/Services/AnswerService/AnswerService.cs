@@ -7,13 +7,18 @@ namespace BeTherServer.Services.AnswerService
     {
         private readonly Dictionary<string, List<UserAnswer>> m_Answers = new Dictionary<string, List<UserAnswer>>();
         private static readonly object sr_DictionaryLock = new object();
+        private IQuestionAnswersDBContext m_QuestionAnswersDatabaseService;
 
+        public AnswerService(IQuestionAnswersDBContext i_QuestionAnswersDatabaseService)
+        {
+            m_QuestionAnswersDatabaseService = i_QuestionAnswersDatabaseService;
+        }
         public async Task<ResultUnit<string>> PostNewAnswer(string i_UserName, UserAnswer i_AnswerToInsert)
         {
             ResultUnit<string> result = new ResultUnit<string>();
 
-            
-            //insert to data base
+
+            await m_QuestionAnswersDatabaseService.InsertAnswerByQuestionId(i_AnswerToInsert);
 
 
             lock (sr_DictionaryLock)

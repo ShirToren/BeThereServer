@@ -20,12 +20,13 @@ public class QuestionsController : Controller
     [HttpGet]
     public async Task<IActionResult> GetAllPreviousQuestionsAndAnswers(string UserName)
     {
-        ResultUnit<Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>> previousQuestionsAndAnswers = await m_PreiousQuestionsLogic.GetUsersPreviousQuestionsAndAnswers(UserName);
+        ResultUnit<Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>> previousQuestionsAndAnswers = await m_PreiousQuestionsLogic.GetUsersQuestionsAndAnswers(UserName);
         try
         {
             if (previousQuestionsAndAnswers.IsSuccess)
             {
                 return Ok(previousQuestionsAndAnswers.ReturnValue);
+
             }
             else
             {
@@ -39,6 +40,29 @@ public class QuestionsController : Controller
     
     }
 
+    [HttpGet("List")]
+    public async Task<IActionResult> GetAnswersList(string QuestionId)
+    {
+        ResultUnit<List<UserAnswer>> result = await m_PreiousQuestionsLogic.GetListOfAnswers(QuestionId);
+        try
+        {
+            if (result.IsSuccess)
+            {
+                return Ok(result.ReturnValue);
+
+            }
+            else
+            {
+                return NotFound(result.ResultMessage);
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500);
+        }
+
+    }
+
 
     [HttpPost]
     public async Task<IActionResult> NewUsersQuestion(string UserName, [FromBody] QuestionAsked i_previousQuestion)
@@ -46,7 +70,7 @@ public class QuestionsController : Controller
         try
         {
             i_previousQuestion.username = UserName;
-            ResultUnit<long> questionId = await m_PreiousQuestionsLogic.InsertQuestionAsked(i_previousQuestion);
+            ResultUnit<string> questionId = await m_PreiousQuestionsLogic.InsertQuestionAsked(i_previousQuestion);
             return Ok(questionId.ReturnValue);
         }
         catch (Exception ex)

@@ -28,7 +28,7 @@ public class UserQuestionsService :IAskedQuestionService
         m_QuestionAnswersDBContext = i_QuestionsAnswersDBContext;
     }
 
-    public async Task<ResultUnit<Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>>> GetUsersPreviousQuestionsAndAnswers(string i_username)
+    public async Task<ResultUnit<Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>>> GetUsersQuestionsAndAnswers(string i_username)
     {
         ResultUnit<Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>> result = new ResultUnit<Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>>();
         Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>> QuestionsAndAnswers = new Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>();
@@ -36,9 +36,9 @@ public class UserQuestionsService :IAskedQuestionService
         List<QuestionAsked> usersPreviousQuestions = await m_QuestionsAskedDBContext.GetPerviousQuestionsByUser(i_username);
         foreach(QuestionAsked question in usersPreviousQuestions)
         {
-            QuestionAnswers AllQuestionsAnswers = await m_QuestionAnswersDBContext.GetAnswersByQuestionId(question.Id);
+            QuestionAnswers AllQuestionsAnswers = await m_QuestionAnswersDBContext.GetAnswersByQuestionId(question.questionId);
             Tuple<QuestionAsked, QuestionAnswers> questionAndAnswersTuple = new Tuple<QuestionAsked, QuestionAnswers>(question, AllQuestionsAnswers);
-            QuestionsAndAnswers.Add(question.Id, questionAndAnswersTuple);
+            QuestionsAndAnswers.Add(question.questionId, questionAndAnswersTuple);
         }
         
         if(usersPreviousQuestions is null)
@@ -54,13 +54,29 @@ public class UserQuestionsService :IAskedQuestionService
         return result;
     }
 
-    public async Task<ResultUnit<long>> InsertQuestionAsked(QuestionAsked i_QuestionAskedToInsert)
+    public async Task<ResultUnit<List<UserAnswer>>> GetListOfAnswers(string i_QuestionId)
     {
-        ResultUnit<long> result = new ResultUnit<long>();
+        ResultUnit<List<UserAnswer>> result = new ResultUnit<List<UserAnswer>>();
+        List<UserAnswer> list = new List<UserAnswer>();
 
-        long uniqueQuestionId = generateTimestampBasedId();
-        i_QuestionAskedToInsert.questionId = uniqueQuestionId;
+            QuestionAnswers AllQuestionsAnswers = await m_QuestionAnswersDBContext.GetAnswersByQuestionId(i_QuestionId);
+            list = AllQuestionsAnswers.userAnswer;
+
+            result.ReturnValue = list;
+        result.IsSuccess = true;
+        return result;
+    }
+
+    public async Task<ResultUnit<string>> InsertQuestionAsked(QuestionAsked i_QuestionAskedToInsert)
+    {
+        ResultUnit<string> result = new ResultUnit<string>();
+
+        //long uniqueQuestionId = generateTimestampBasedId();
+
         await m_QuestionsAskedDBContext.InsertNewQuestionAsked(i_QuestionAskedToInsert);
+        //create new answers object for this question, with empty list
+        await m_QuestionAnswersDBContext.CreateNewQuestionAnswersItem(i_QuestionAskedToInsert.questionId);
+
         Dictionary<string, LocationData> locations = m_UpdateLocationService.GetLocations();
         foreach (var kvp in locations)
         {
@@ -77,7 +93,6 @@ public class UserQuestionsService :IAskedQuestionService
             }
         }
 
-        result.ReturnValue = uniqueQuestionId;
         result.IsSuccess = true;
         return result;
     }
@@ -105,7 +120,7 @@ public class UserQuestionsService :IAskedQuestionService
     //delete
     public async Task InsertQuestionAnswer(QuestionAnswers i_QuestionAskedToInsert)
     {
-        await m_QuestionAnswersDBContext.InsertNewQuestionAsked(i_QuestionAskedToInsert);
+        await m_QuestionAnswersDBContext.InsertNewQuestionAnswers(i_QuestionAskedToInsert);
 
     }
 

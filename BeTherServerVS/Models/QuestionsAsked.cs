@@ -10,7 +10,7 @@ namespace BeTherServer.Models
         public string chatRoomId { get; set; } = null!;
    
         public string question { get; set; } = null!;
-        public long? questionId { get; set; } = null!;
+        public string questionId { get; set; } = null!;
         public int? minimumAgeRange { get; set; } = null!;
         public int? maximumAgeRange { get; set; } = null!;
         public string gender { get; set; } = null!;
