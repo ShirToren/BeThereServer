@@ -8,10 +8,12 @@ namespace BeTherServer.Services.AnswerService
         private readonly Dictionary<string, List<UserAnswer>> m_Answers = new Dictionary<string, List<UserAnswer>>();
         private static readonly object sr_DictionaryLock = new object();
         private IQuestionAnswersDBContext m_QuestionAnswersDatabaseService;
+        private IAskedQuestionDBContext m_AskedQuestionDatabaseService;
 
-        public AnswerService(IQuestionAnswersDBContext i_QuestionAnswersDatabaseService)
+        public AnswerService(IQuestionAnswersDBContext i_QuestionAnswersDatabaseService, IAskedQuestionDBContext i_AskedQuestionDatabaseService)
         {
             m_QuestionAnswersDatabaseService = i_QuestionAnswersDatabaseService;
+            m_AskedQuestionDatabaseService = i_AskedQuestionDatabaseService;
         }
         public async Task<ResultUnit<string>> PostNewAnswer(string i_UserName, UserAnswer i_AnswerToInsert)
         {
@@ -19,7 +21,7 @@ namespace BeTherServer.Services.AnswerService
 
 
             await m_QuestionAnswersDatabaseService.InsertAnswerByQuestionId(i_AnswerToInsert);
-
+            m_AskedQuestionDatabaseService.IncreaseNumOfAnswers(i_AnswerToInsert.questionId);
 
             lock (sr_DictionaryLock)
             {

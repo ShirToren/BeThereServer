@@ -31,6 +31,13 @@ public class AskedQuestionsMongoContext : BaseMongoContext<QuestionAsked>,IAsked
         await base.InsertOneObject(i_NewQuestion);
         return;
     }
+    public void IncreaseNumOfAnswers(string i_QuestionId)
+    {
+        FilterDefinition<QuestionAsked> idFilter = Builders<QuestionAsked>.Filter.Eq("questionId", i_QuestionId);
+        UpdateDefinition<QuestionAsked> idUpdate = Builders<QuestionAsked>.Update.Inc("numOfAnswers", 1);
+        base.Collection.UpdateOne(idFilter, idUpdate);
+        return;
+    }
 
     //public async Task<List<PreviousQuestions>> GetAsync()
     //{

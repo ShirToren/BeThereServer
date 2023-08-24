@@ -19,6 +19,6 @@ namespace BeTherServer.Models
         public string time { get; set; } = null!;
         public string username { get; set; } = null!;
         public double radius { get; set; } =0.0!;
-       
+        public int numOfAnswers { get; set; } = 0!;
     }
 }

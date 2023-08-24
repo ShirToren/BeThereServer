@@ -7,6 +7,7 @@ namespace BeTherServer.Services
 	{
         Task<List<QuestionAsked>> GetPerviousQuestionsByUser(string i_username);
         Task InsertNewQuestionAsked(QuestionAsked i_objectToInsrtToCollection);
+        void IncreaseNumOfAnswers(string i_QuestionId);
 
     }
 }
