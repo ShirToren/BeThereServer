@@ -46,7 +46,6 @@ namespace BeTherServer.Services
             }
             else
             {
-               
                 await m_UserInfoDatabaseService.CreateNewUser(i_NewUser);
             }
 

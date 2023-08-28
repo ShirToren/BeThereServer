@@ -7,6 +7,7 @@ namespace BeTherServer.Services.NotificationsService
         private readonly Dictionary<string, List<QuestionAsked>> m_Notifications = new Dictionary<string, List<QuestionAsked>>();
         private static readonly object sr_DictionaryLock = new object();
 
+
         public List<QuestionAsked> GetUsersNotifications(string i_UserName)
         {
             lock (sr_DictionaryLock)

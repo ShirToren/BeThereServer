@@ -13,19 +13,21 @@ public class UserQuestionsService :IAskedQuestionService
 {
     private const double EarthRadiusKm = 6371.0; // Earth's radius in kilometers
 
-    IAskedQuestionDBContext m_QuestionsAskedDBContext;
-    IQuestionAnswersDBContext m_QuestionAnswersDBContext;
-    IUpdateLocationService m_UpdateLocationService;
-    INotificationsService m_NotificationsService;
+    private IAskedQuestionDBContext m_QuestionsAskedDBContext;
+    private IQuestionAnswersDBContext m_QuestionAnswersDBContext;
+    private IUserDBContext m_UserDBContext;
+    private IUpdateLocationService m_UpdateLocationService;
+    private INotificationsService m_NotificationsService;
 
 
 
-    public UserQuestionsService(IAskedQuestionDBContext i_QuestionsAskedDBSContext, IUpdateLocationService i_UpdateLocationService, INotificationsService i_NotificationsService, IQuestionAnswersDBContext i_QuestionsAnswersDBContext)
+    public UserQuestionsService(IAskedQuestionDBContext i_QuestionsAskedDBSContext, IUpdateLocationService i_UpdateLocationService, INotificationsService i_NotificationsService, IQuestionAnswersDBContext i_QuestionsAnswersDBContext, IUserDBContext i_UserDBContext)
     {
         m_QuestionsAskedDBContext = i_QuestionsAskedDBSContext;
         m_UpdateLocationService = i_UpdateLocationService;
         m_NotificationsService = i_NotificationsService;
         m_QuestionAnswersDBContext = i_QuestionsAnswersDBContext;
+        m_UserDBContext = i_UserDBContext;
     }
 
     public async Task<ResultUnit<Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>>> GetUsersQuestionsAndAnswers(string i_username)
@@ -86,15 +88,33 @@ public class UserQuestionsService :IAskedQuestionService
                 location.latitude, location.longitude);
             distance = distance * 1000;
             double radiusKm = i_QuestionAskedToInsert.radius; // Radius in kilometers
-            if (distance <= radiusKm)
+            if (distance <= radiusKm && await isUserFitsFilters(i_QuestionAskedToInsert, userName))
             {
                 m_NotificationsService.AddNotification(userName, i_QuestionAskedToInsert);
-
             }
         }
 
         result.IsSuccess = true;
         return result;
+    }
+
+    private async Task<bool> isUserFitsFilters(QuestionAsked i_Question, string i_UserName)
+    {
+        bool isUserFits = true;
+        UserData user = await m_UserDBContext.GetUserByUsername(i_UserName);
+        if(i_Question.gender != null && !i_Question.gender.Equals(user.gender))
+        {
+            isUserFits = false;
+        }
+        if (i_Question.minimumAgeRange != null && user.age < i_Question.minimumAgeRange)
+        {
+            isUserFits = false;
+        }
+        if (i_Question.maximumAgeRange != null && user.age > i_Question.maximumAgeRange)
+        {
+            isUserFits = false;
+        }
+        return isUserFits;
     }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2)

@@ -58,5 +58,4 @@ public class AskedQuestionsMongoContext : BaseMongoContext<QuestionAsked>,IAsked
     //    await m_previousQuestionsCollection.DeleteOneAsync(filter);
     //    return;
     //}
-
 }
