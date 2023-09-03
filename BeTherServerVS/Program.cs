@@ -24,6 +24,7 @@ builder.Services.AddSingleton<IAskedQuestionService, UserQuestionsService>();
 builder.Services.AddSingleton<IUpdateLocationService, UpdateLocationService>();
 builder.Services.AddSingleton<INotificationsService, NotificationsService>();
 builder.Services.AddSingleton<IAnswerService, AnswerService>();
+builder.Services.AddSingleton<IChatService, ChatService>();
 
 
 // Add services to the container
