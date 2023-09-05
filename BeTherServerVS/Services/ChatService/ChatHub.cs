@@ -10,21 +10,19 @@ namespace BeTherServer.Services.ChatService;
 public class ChatHub : Hub
 {
     private IChatMessagesDBContext m_ChatMessagesDatabaseService;
-    private readonly Dictionary<string, HashSet<string>> userRooms = new Dictionary<string, HashSet<string>>();
+    private IChatService m_ChatService;
 
-    public ChatHub(IChatMessagesDBContext i_ChatMessagesDatabaseService)
+    public ChatHub(IChatMessagesDBContext i_ChatMessagesDatabaseService, IChatService i_ChatService)
     {
         m_ChatMessagesDatabaseService = i_ChatMessagesDatabaseService;
-        if(userRooms.Count == 0)
-        {
-            //fetch from data base
-        }
+        m_ChatService = i_ChatService;
     }
 
     public async Task JoinChatRoom(string chatRoomId)
     {
         var connectionId = Context.ConnectionId;
-        
+        var userRooms = m_ChatService.GetUserRooms();
+
 
         // Check if the user has already joined the room
         if (!userRooms.ContainsKey(connectionId) || !userRooms[connectionId].Contains(chatRoomId))
@@ -39,21 +37,20 @@ public class ChatHub : Hub
             userRooms[connectionId].Add(chatRoomId);
 
             // Notify clients about the updated list of chat rooms
-
             //await Clients.Client(connectionId).SendAsync("UpdateChatRooms", userRooms[connectionId]);
-            await Clients.Group(chatRoomId).SendAsync("UpdateChatRooms", chatRoomId);
-
-
+            //await Clients.Group(chatRoomId).SendAsync("UpdateChatRooms", chatRoomId);
             //await Clients.Group(chatRoomId).SendAsync("UserJoined", $"{connectionId} joined the chat room.");
-            var messages = await m_ChatMessagesDatabaseService.GetMessagesByChatRoom(chatRoomId);
-            await Clients.Caller.SendAsync("LoadChatHistory", messages);
+            //var messages = await m_ChatMessagesDatabaseService.GetMessagesByChatRoom(chatRoomId);
+            //await Clients.Caller.SendAsync("LoadChatHistory", messages);
+            await EnterChatRoom(chatRoomId);
+            await Clients.Group(chatRoomId).SendAsync("UpdateChatRooms", chatRoomId);
         }
         else
         {
             // User is already in the room
             //await Clients.Caller.SendAsync("AlreadyJoined", "You are already in the chat room.");
+            await EnterChatRoom(chatRoomId);
         }
-
 
 
         //await Groups.AddToGroupAsync(Context.ConnectionId, chatRoomId);
@@ -67,6 +64,11 @@ public class ChatHub : Hub
     public async Task LeaveChatRoom(string chatRoomId)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatRoomId);
+    }
+    public async Task EnterChatRoom(string chatRoomId)
+    {
+        var messages = await m_ChatMessagesDatabaseService.GetMessagesByChatRoom(chatRoomId);
+        await Clients.Caller.SendAsync("LoadChatHistory", messages);
     }
 
     public async Task<List<ChatMessage>> GetChatMessagesAsync(string chatRoomId)
@@ -93,18 +95,19 @@ public class ChatHub : Hub
     public async Task CreateChatRoom(string chatRoomId)
     {
         var connectionId = Context.ConnectionId;
+        var userRooms = m_ChatService.GetUserRooms();
 
         // Check if the user has already joined the room
-        if (!userRooms.ContainsKey(connectionId) || !userRooms[connectionId].Contains(chatRoomId))
-        {
+        //if (!userRooms.ContainsKey(connectionId) || !userRooms[connectionId].Contains(chatRoomId))
+        //{
             await Groups.AddToGroupAsync(connectionId, chatRoomId);
 
-            if (!userRooms.ContainsKey(connectionId))
+/*            if (!userRooms.ContainsKey(connectionId))
             {
                 userRooms[connectionId] = new HashSet<string>();
             }
 
-            userRooms[connectionId].Add(chatRoomId);
-        }
+            userRooms[connectionId].Add(chatRoomId);*/
+       // }
     }
 }
