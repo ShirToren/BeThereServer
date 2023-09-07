@@ -8,6 +8,8 @@ public interface IQuestionAnswersDBContext
     Task<QuestionAnswers> GetAnswersByQuestionId(string i_QuestionId);
 
 
-    Task InsertNewQuestionAsked(QuestionAnswers i_NewAnnswer);
+    Task InsertNewQuestionAnswers(QuestionAnswers i_NewAnnswer);
+    Task CreateNewQuestionAnswersItem(string i_QuestionId);
+    Task InsertAnswerByQuestionId(UserAnswer I_Answer);
 }
 

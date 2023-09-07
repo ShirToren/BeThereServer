@@ -6,5 +6,6 @@
         public string text { get; set; } = null!;
         public string questionId { get; set; } = null!;
         public string chatRoomId { get; set; } = null!;
+        public DateTime Timestamp { get; set; }
     }
 }

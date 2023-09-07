@@ -8,7 +8,7 @@ namespace BeTherServer.Models
         public string? Id { get; set; }
 
         public string questionId { get; set; } = null!;
-        public List<UserAnswer>? userAnswer { get; set; } = null!;
+        public List<UserAnswer> userAnswer { get; set; } = null!;
     }
 }
 

@@ -10,7 +10,7 @@ namespace BeTherServer.Models
         public string chatRoomId { get; set; } = null!;
    
         public string question { get; set; } = null!;
-        public long? questionId { get; set; } = null!;
+        public string questionId { get; set; } = null!;
         public int? minimumAgeRange { get; set; } = null!;
         public int? maximumAgeRange { get; set; } = null!;
         public string gender { get; set; } = null!;
@@ -19,6 +19,6 @@ namespace BeTherServer.Models
         public string time { get; set; } = null!;
         public string username { get; set; } = null!;
         public double radius { get; set; } =0.0!;
-       
+        public int numOfAnswers { get; set; } = 0!;
     }
 }

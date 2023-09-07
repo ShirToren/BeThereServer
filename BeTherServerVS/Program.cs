@@ -17,12 +17,14 @@ builder.Services.AddSingleton<IConnectToAppDBContext,ConnectToAppMongoContext>()
 builder.Services.AddSingleton<IAskedQuestionDBContext, AskedQuestionsMongoContext>();
 builder.Services.AddSingleton<IQuestionAnswersDBContext, QuestionAnswersMongoContext>();
 builder.Services.AddSingleton<IChatMessagesDBContext, ChatMessagesMongoContext>();
+builder.Services.AddSingleton<IUserDBContext, UserMongoContext>();
 builder.Services.AddSingleton<UserQuestionsService>();
 builder.Services.AddScoped<IConnectToAppService, ConnectToAppService>();
 builder.Services.AddSingleton<IAskedQuestionService, UserQuestionsService>();
 builder.Services.AddSingleton<IUpdateLocationService, UpdateLocationService>();
 builder.Services.AddSingleton<INotificationsService, NotificationsService>();
 builder.Services.AddSingleton<IAnswerService, AnswerService>();
+builder.Services.AddSingleton<IChatService, ChatService>();
 
 
 // Add services to the container
