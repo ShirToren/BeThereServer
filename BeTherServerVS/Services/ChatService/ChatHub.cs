@@ -37,29 +37,15 @@ public class ChatHub : Hub
             userRooms[connectionId].Add(chatRoomId);
 
             // Notify clients about the updated list of chat rooms
-            //await Clients.Client(connectionId).SendAsync("UpdateChatRooms", userRooms[connectionId]);
-            //await Clients.Group(chatRoomId).SendAsync("UpdateChatRooms", chatRoomId);
-            //await Clients.Group(chatRoomId).SendAsync("UserJoined", $"{connectionId} joined the chat room.");
-            //var messages = await m_ChatMessagesDatabaseService.GetMessagesByChatRoom(chatRoomId);
-            //await Clients.Caller.SendAsync("LoadChatHistory", messages);
-            await EnterChatRoom(chatRoomId);
             await Clients.Group(chatRoomId).SendAsync("UpdateChatRooms", chatRoomId);
         }
         else
         {
             // User is already in the room
             //await Clients.Caller.SendAsync("AlreadyJoined", "You are already in the chat room.");
-            await EnterChatRoom(chatRoomId);
         }
 
-
-        //await Groups.AddToGroupAsync(Context.ConnectionId, chatRoomId);
-
-        //      var messages = await m_ChatMessagesDatabaseService.GetMessagesByChatRoom(chatRoomId);
-        //      await Clients.Caller.SendAsync("LoadChatHistory", messages);
-
-        //Handle Message History in .NET MAUI:
-        //In your .NET MAUI app, handle the "LoadChatHistory" event from SignalR.When the chat history is received, populate the chat interface with the saved messages.
+        await EnterChatRoom(chatRoomId);
     }
     public async Task LeaveChatRoom(string chatRoomId)
     {
