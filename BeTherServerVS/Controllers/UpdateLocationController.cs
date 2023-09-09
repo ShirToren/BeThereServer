@@ -34,7 +34,7 @@ namespace BeTherServer.Controllers
         [HttpPost]
         public IActionResult Post(string UserName, [FromBody] LocationData i_Location)
         {
-                m_UpdateLocationLogic.UpdateCurrentLocation(UserName, i_Location);
+                m_UpdateLocationLogic.UpdateCurrentLocation(UserName, i_Location, i_Location.City);
                 return Ok();
         }
     }

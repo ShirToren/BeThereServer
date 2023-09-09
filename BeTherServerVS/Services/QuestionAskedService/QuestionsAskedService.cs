@@ -9,7 +9,7 @@ using System;
 
 namespace BeTherMongoDB.Services;
 
-public class UserQuestionsService :IAskedQuestionService
+public class UserQuestionsService : IAskedQuestionService
 {
     private const double EarthRadiusKm = 6371.0; // Earth's radius in kilometers
 
@@ -18,8 +18,6 @@ public class UserQuestionsService :IAskedQuestionService
     private IUserDBContext m_UserDBContext;
     private IUpdateLocationService m_UpdateLocationService;
     private INotificationsService m_NotificationsService;
-
-
 
     public UserQuestionsService(IAskedQuestionDBContext i_QuestionsAskedDBSContext, IUpdateLocationService i_UpdateLocationService, INotificationsService i_NotificationsService, IQuestionAnswersDBContext i_QuestionsAnswersDBContext, IUserDBContext i_UserDBContext)
     {
@@ -36,14 +34,14 @@ public class UserQuestionsService :IAskedQuestionService
         Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>> QuestionsAndAnswers = new Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>();
 
         List<QuestionAsked> usersPreviousQuestions = await m_QuestionsAskedDBContext.GetPerviousQuestionsByUser(i_username);
-        foreach(QuestionAsked question in usersPreviousQuestions)
+        foreach (QuestionAsked question in usersPreviousQuestions)
         {
             QuestionAnswers AllQuestionsAnswers = await m_QuestionAnswersDBContext.GetAnswersByQuestionId(question.questionId);
             Tuple<QuestionAsked, QuestionAnswers> questionAndAnswersTuple = new Tuple<QuestionAsked, QuestionAnswers>(question, AllQuestionsAnswers);
             QuestionsAndAnswers.Add(question.questionId, questionAndAnswersTuple);
         }
-        
-        if(usersPreviousQuestions is null)
+
+        if (usersPreviousQuestions is null)
         {
             result.IsSuccess = false;
             result.ResultMessage = "No previous questions";
@@ -61,24 +59,51 @@ public class UserQuestionsService :IAskedQuestionService
         ResultUnit<List<UserAnswer>> result = new ResultUnit<List<UserAnswer>>();
         List<UserAnswer> list = new List<UserAnswer>();
 
-            QuestionAnswers AllQuestionsAnswers = await m_QuestionAnswersDBContext.GetAnswersByQuestionId(i_QuestionId);
-            list = AllQuestionsAnswers.userAnswer;
+        QuestionAnswers AllQuestionsAnswers = await m_QuestionAnswersDBContext.GetAnswersByQuestionId(i_QuestionId);
+        list = AllQuestionsAnswers.userAnswer;
 
-            result.ReturnValue = list;
+        result.ReturnValue = list;
         result.IsSuccess = true;
         return result;
     }
 
-    public async Task<ResultUnit<string>> InsertQuestionAsked(QuestionAsked i_QuestionAskedToInsert)
+    public async Task<ResultUnit<string>> handleNewQuestionAsked(QuestionAsked i_QuestionAskedToInsert)
     {
         ResultUnit<string> result = new ResultUnit<string>();
 
-        //long uniqueQuestionId = generateTimestampBasedId();
-
         await m_QuestionsAskedDBContext.InsertNewQuestionAsked(i_QuestionAskedToInsert);
-        //create new answers object for this question, with empty list
         await m_QuestionAnswersDBContext.CreateNewQuestionAnswersItem(i_QuestionAskedToInsert.questionId);
 
+        if (i_QuestionAskedToInsert.IsCityQuestion == true)
+        {
+            handleCityQuestion(i_QuestionAskedToInsert);
+        }
+        else
+        {
+            handleCoordinateQuestion(i_QuestionAskedToInsert);
+        }
+
+        result.IsSuccess = true;
+        return result;
+    }
+
+    private void handleCityQuestion(QuestionAsked i_QuestionAskedToInsert)
+    {
+        Dictionary<string, string> locations = m_UpdateLocationService.GetCityLocations();
+        foreach (var kvp in locations)
+        {
+            string userName = kvp.Key;
+            string city = kvp.Value;
+
+            if (city == i_QuestionAskedToInsert.location.City)
+            {
+                m_NotificationsService.AddNotification(userName, i_QuestionAskedToInsert);
+            }
+        }
+    }
+
+    private async void handleCoordinateQuestion(QuestionAsked i_QuestionAskedToInsert)
+    {
         Dictionary<string, LocationData> locations = m_UpdateLocationService.GetLocations();
         foreach (var kvp in locations)
         {
@@ -93,16 +118,13 @@ public class UserQuestionsService :IAskedQuestionService
                 m_NotificationsService.AddNotification(userName, i_QuestionAskedToInsert);
             }
         }
-
-        result.IsSuccess = true;
-        return result;
     }
 
     private async Task<bool> isUserFitsFilters(QuestionAsked i_Question, string i_UserName)
     {
         bool isUserFits = true;
         UserData user = await m_UserDBContext.GetUserByUsername(i_UserName);
-        if(i_Question.gender != null && !i_Question.gender.Equals(user.gender))
+        if (i_Question.gender != null && !i_Question.gender.Equals(user.gender))
         {
             isUserFits = false;
         }

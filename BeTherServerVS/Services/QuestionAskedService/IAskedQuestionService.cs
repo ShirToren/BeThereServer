@@ -4,10 +4,10 @@ using BeTherServer.Services.Utils;
 
 namespace BeTherServer.Services
 {
-	public interface IAskedQuestionService
-	{
+    public interface IAskedQuestionService
+    {
         Task<ResultUnit<Dictionary<string, Tuple<QuestionAsked, QuestionAnswers>>>> GetUsersQuestionsAndAnswers(string i_username);
-        Task<ResultUnit<string>> InsertQuestionAsked(QuestionAsked i_PreviousQuestionToInsert);
+        Task<ResultUnit<string>> handleNewQuestionAsked(QuestionAsked i_PreviousQuestionToInsert);
 
         //delete
         Task InsertQuestionAnswer(QuestionAnswers i_QuestionAskedToInsert);

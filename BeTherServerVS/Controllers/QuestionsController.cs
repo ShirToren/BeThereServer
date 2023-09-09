@@ -33,11 +33,11 @@ public class QuestionsController : Controller
                 return NotFound(previousQuestionsAndAnswers.ResultMessage);
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return StatusCode(500);
         }
-    
+
     }
 
     [HttpGet("List")]
@@ -69,8 +69,9 @@ public class QuestionsController : Controller
     {
         try
         {
+            await Task.Delay(3000);
             i_previousQuestion.username = UserName;
-            ResultUnit<string> questionId = await m_PreiousQuestionsLogic.InsertQuestionAsked(i_previousQuestion);
+            ResultUnit<string> questionId = await m_PreiousQuestionsLogic.handleNewQuestionAsked(i_previousQuestion);
             return Ok(questionId.ReturnValue);
         }
         catch (Exception ex)
