@@ -27,5 +27,10 @@ namespace BeTherServer.MongoContext
             }
             return messagesToReturn;
         }
+        public async Task<ChatMessage> GetLastMessageByChatRoom(string chatRoomId)
+        {
+            ChatMessage response = await base.Collection.Find(x => x.ChatRoomId == chatRoomId).FirstOrDefaultAsync();
+            return response;
+        }
     }
 }

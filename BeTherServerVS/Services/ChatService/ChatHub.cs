@@ -1,5 +1,6 @@
 ﻿using Amazon.Runtime.Internal;
 using BeTherServer.Models;
+using BeTherServer.Services.UserRoomsService;
 using Microsoft.AspNetCore.SignalR;
 using MongoDB.Driver.Core.Connections;
 using System.Reflection.Metadata;
@@ -38,6 +39,7 @@ public class ChatHub : Hub
 
             // Notify clients about the updated list of chat rooms
             await Clients.Group(chatRoomId).SendAsync("UpdateChatRooms", chatRoomId);
+
         }
         else
         {

@@ -7,5 +7,6 @@ namespace BeTherServer.Services.ChatService
     {
         Task<ResultUnit<List<ChatMessage>>> GetMessagesByChatRoomId(string i_ChatRoom);
         Dictionary<string, HashSet<string>> GetUserRooms();
+        Task<ResultUnit<ChatMessage>> GetLastMessageByChatRoomId(string i_ChatRoom);
     }
 }

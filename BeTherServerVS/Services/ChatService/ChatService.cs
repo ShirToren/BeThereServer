@@ -34,6 +34,23 @@ namespace BeTherServer.Services.ChatService
 
             return result;
         }
+        public async Task<ResultUnit<ChatMessage>> GetLastMessageByChatRoomId(string i_ChatRoom)
+        {
+            ResultUnit<ChatMessage> result = new ResultUnit<ChatMessage>();
+            ChatMessage message = await m_ChatMessagesDatabaseService.GetLastMessageByChatRoom(i_ChatRoom);
+
+            if (message != null)
+            {
+                result.IsSuccess = true;
+                result.ReturnValue = message;
+            }
+            else
+            {
+                result.IsSuccess = false;
+            }
+
+            return result;
+        }
 
         Dictionary<string, HashSet<string>> IChatService.GetUserRooms()
         {

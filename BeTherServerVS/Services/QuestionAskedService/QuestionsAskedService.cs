@@ -87,7 +87,7 @@ public class UserQuestionsService : IAskedQuestionService
         return result;
     }
 
-    private void handleCityQuestion(QuestionAsked i_QuestionAskedToInsert)
+    private async void handleCityQuestion(QuestionAsked i_QuestionAskedToInsert)
     {
         Dictionary<string, string> locations = m_UpdateLocationService.GetCityLocations();
         foreach (var kvp in locations)
@@ -95,7 +95,7 @@ public class UserQuestionsService : IAskedQuestionService
             string userName = kvp.Key;
             string city = kvp.Value;
 
-            if (city == i_QuestionAskedToInsert.location.City)
+            if (city == i_QuestionAskedToInsert.location.City && await isUserFitsFilters(i_QuestionAskedToInsert, userName))
             {
                 m_NotificationsService.AddNotification(userName, i_QuestionAskedToInsert);
             }
