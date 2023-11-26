@@ -8,17 +8,17 @@ namespace BeTherServer.Services
 	public class ConnectToAppService : IConnectToAppService
 	{
         
-        IConnectToAppDBContext m_UserInfoDatabaseService;
+        private readonly IConnectToAppDBContext r_UserInfoDatabaseService;
 
 		public ConnectToAppService(IConnectToAppDBContext i_UserInfoDatabaseService)
 		{
-            m_UserInfoDatabaseService = i_UserInfoDatabaseService;
+            r_UserInfoDatabaseService = i_UserInfoDatabaseService;
         }
 
 		public async Task<ResultUnit<UserData>> LoginToApp(string i_username, string i_password)
 		{
             ResultUnit<UserData> resultHelper = new ResultUnit<UserData>();
-            UserData userByUsername = await m_UserInfoDatabaseService.GetUserByUsername(i_username);
+            UserData userByUsername = await r_UserInfoDatabaseService.GetUserByUsername(i_username);
             if (userByUsername is null)
             {
                 resultHelper.IsSuccess = false;
@@ -37,7 +37,7 @@ namespace BeTherServer.Services
         public async Task<ResultUnit<string>> CreateNewUserAccount(UserData i_NewUser)
         {
             ResultUnit<string> resultHelper = new ResultUnit<string>();
-            List<UserData> usersData = await m_UserInfoDatabaseService.GetAllUsers();
+            List<UserData> usersData = await r_UserInfoDatabaseService.GetAllUsers();
 
             if (checkIfUsernameFreeToUse(i_NewUser.username, usersData) == false)
             {
@@ -46,7 +46,7 @@ namespace BeTherServer.Services
             }
             else
             {
-                await m_UserInfoDatabaseService.CreateNewUser(i_NewUser);
+                await r_UserInfoDatabaseService.CreateNewUser(i_NewUser);
             }
 
             return resultHelper;
@@ -55,7 +55,7 @@ namespace BeTherServer.Services
         public async Task<ResultUnit<UserData>> GetUserData(string i_UserName)
         {
             ResultUnit<UserData> resultHelper = new ResultUnit<UserData>();
-            UserData usersData = await m_UserInfoDatabaseService.GetUserByUsername(i_UserName);
+            UserData usersData = await r_UserInfoDatabaseService.GetUserByUsername(i_UserName);
 
             if (usersData != null)
             {

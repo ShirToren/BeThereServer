@@ -41,7 +41,14 @@ namespace BeTherServer.MongoContext
         public async Task<HashSet<string>> GetRoomsByUserName(string i_Username)
         {
             var responseUser = await base.Collection.Find(x => x.username == i_Username).FirstOrDefaultAsync();
-            return responseUser.rooms;
+            if(responseUser != null)
+            {
+                return responseUser.rooms;
+            }
+            else
+            {
+                return new HashSet<string>();
+            }
         }
     }
 }

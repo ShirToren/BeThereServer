@@ -124,7 +124,7 @@ public class UserQuestionsService : IAskedQuestionService
     {
         bool isUserFits = true;
         UserData user = await m_UserDBContext.GetUserByUsername(i_UserName);
-        if (i_Question.gender != null && !i_Question.gender.Equals(user.gender))
+        if (i_Question.gender != null && (!i_Question.gender.Equals("All") && !i_Question.gender.Equals(user.gender)))
         {
             isUserFits = false;
         }

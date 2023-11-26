@@ -7,6 +7,7 @@ using BeTherServer.Services.NotificationsService;
 using BeTherServer.Services.ChatService;
 using BeTherServer.Services.AnswerService;
 using BeTherServer.Services.UserRoomsService;
+using BeTherServer.Services.CreditsService;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoService"));
@@ -29,6 +30,7 @@ builder.Services.AddSingleton<INotificationsService, NotificationsService>();
 builder.Services.AddSingleton<IAnswerService, AnswerService>();
 builder.Services.AddSingleton<IChatService, ChatService>();
 builder.Services.AddSingleton<IUserRoomsService, UserRoomsService>();
+builder.Services.AddSingleton<ICreditsService, CreditsService>();
 
 
 
