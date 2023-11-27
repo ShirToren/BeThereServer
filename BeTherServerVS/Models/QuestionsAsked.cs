@@ -3,12 +3,13 @@
 namespace BeTherServer.Models
 {
     public class QuestionAsked
+
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; } = null!;
         public string chatRoomId { get; set; } = null!;
-
+        
         public string question { get; set; } = null!;
         public string questionId { get; set; } = null!;
         public int? minimumAgeRange { get; set; } = null!;

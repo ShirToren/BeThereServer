@@ -6,5 +6,6 @@ namespace BeTherServer.Services.ChatService
     {
         Task SaveMessage(ChatMessage chatMessage);
         Task<List<ChatMessage>> GetMessagesByChatRoom(string chatRoomId);
+        Task<ChatMessage> GetLastMessageByChatRoom(string chatRoomId);
     }
 }

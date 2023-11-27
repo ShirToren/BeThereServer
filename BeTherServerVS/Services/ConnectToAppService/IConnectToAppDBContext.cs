@@ -8,7 +8,6 @@ namespace BeTherServer.Services
         Task<UserData> GetUserByUsername(string i_username);
         Task<List<UserData>> GetAllUsers();
         Task CreateNewUser(UserData i_NewUserData);
-
     }
 }
 

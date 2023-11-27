@@ -33,7 +33,16 @@ public class BaseMongoContext<T>
     }
     public async Task<T> FindObjectByFilter(FilterDefinition<T> filter)
     {
+        try
+        {
+            return await m_Collection.Find(filter).FirstOrDefaultAsync();
+        } 
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
         return await m_Collection.Find(filter).FirstOrDefaultAsync();
+
     }
 
     public async Task InsertOneObject(T i_objectToInsrtToCollection)

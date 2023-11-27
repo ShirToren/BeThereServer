@@ -27,5 +27,19 @@ namespace BeTherServer.Controllers
                 return StatusCode(500);
             }
         }
+        [Route("Last")]
+        [HttpGet]
+        public async Task<IActionResult> GetLastMessageByChatRoomId(string ChatRoomId)
+        {
+            ResultUnit<ChatMessage> result = await r_ChatService.GetLastMessageByChatRoomId(ChatRoomId);
+            try
+            {
+                return Ok(result.ReturnValue);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }
